@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>大数据-4 | jjHome</title><meta name="author" content="你猜我是谁"><meta name="copyright" content="你猜我是谁"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="大数据-41 HDFS格式化相关问题注意：在生产环境中，任何的文件删除几乎都是非常严重的事件。在HDFS有文件存在时是不可以格式化的，因为hdfs格式化仅仅在namenode节点，而数据在其他节点，有文件时格式化会造成namenode的相关id与datanode的不一致，从而进入数据保护模式（安全模式）。如果一定要进行格式化，需要先关闭集群，删除所有节点上的数据目录（在配置文件中指定的），然后进行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据-4">
+<meta property="og:url" content="http://example.com/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/index.html">
+<meta property="og:site_name" content="jjHome">
+<meta property="og:description" content="大数据-41 HDFS格式化相关问题注意：在生产环境中，任何的文件删除几乎都是非常严重的事件。在HDFS有文件存在时是不可以格式化的，因为hdfs格式化仅仅在namenode节点，而数据在其他节点，有文件时格式化会造成namenode的相关id与datanode的不一致，从而进入数据保护模式（安全模式）。如果一定要进行格式化，需要先关闭集群，删除所有节点上的数据目录（在配置文件中指定的），然后进行">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.png">
+<meta property="article:published_time" content="2024-11-06T00:49:55.000Z">
+<meta property="article:modified_time" content="2024-11-06T00:52:23.725Z">
+<meta property="article:author" content="你猜我是谁">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.1.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '大数据-4',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-06 08:52:23'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/rss2.xml" title="jjHome" type="application/rss+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我们</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/avatar.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/favicon.png" alt="Logo"><span class="site-name">jjHome</span></a><a class="nav-page-title" href="/"><span class="site-name">大数据-4</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我们</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">大数据-4</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-06T00:49:55.000Z" title="发表于 2024-11-06 08:49:55">2024-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-06T00:52:23.725Z" title="更新于 2024-11-06 08:52:23">2024-11-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="大数据-4"><a href="#大数据-4" class="headerlink" title="大数据-4"></a>大数据-4</h1><h2 id="1-HDFS格式化相关问题"><a href="#1-HDFS格式化相关问题" class="headerlink" title="1 HDFS格式化相关问题"></a>1 HDFS格式化相关问题</h2><p>注意：在生产环境中，任何的文件删除几乎都是非常严重的事件。<br>在HDFS有文件存在时是不可以格式化的，因为hdfs格式化仅仅在namenode节点，而数据在其他节点，有文件时格式化会造成namenode的相关id与datanode的不一致，从而进入数据保护模式（安全模式）。<br>如果一定要进行格式化，需要先关闭集群，删除所有节点上的数据目录（在配置文件中指定的），然后进行namenode格式化，再启动集群。<br>一旦提示是安全模式，任何数据操作都进行不了了，需要退出安全模式。</p>
+<h2 id="2-web查看页面"><a href="#2-web查看页面" class="headerlink" title="2 web查看页面"></a>2 web查看页面</h2><p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/e6c4fc74b255ec3eb690966b5bbdbe215b39deb7502dced8371229de2f299137.png" alt="图 0">  </p>
+<h2 id="3-HDFS文件上传测试"><a href="#3-HDFS文件上传测试" class="headerlink" title="3 HDFS文件上传测试"></a>3 HDFS文件上传测试</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -put 文件名 /</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/9638cf631b60bd12704482fef01af6652cfd40bdc184662ae0562c284488d115.png" alt="图 1"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/d58fd734de561083f19d85d6282217c1491451e285ea30c984a66f747bfd0e23.png" alt="图 2">  </p>
+<h2 id="4-计算资源测试"><a href="#4-计算资源测试" class="headerlink" title="4 计算资源测试"></a>4 计算资源测试</h2><h3 id="4-1-解决HDFS的所有问题"><a href="#4-1-解决HDFS的所有问题" class="headerlink" title="4.1 解决HDFS的所有问题"></a>4.1 解决HDFS的所有问题</h3><p>文件副本数，默认是3，当前只有2个datanode节点，所以只能存2份，hdfs系统是有冲突的，解决办法：</p>
+<ul>
+<li>把副本数改成1。</li>
+<li>增加一个datanode节点。在实验环境下，可以让namenode节点兼用datanode节点。</li>
+</ul>
+<h3 id="4-2-让namenode节点兼用datanode节点的启动方法"><a href="#4-2-让namenode节点兼用datanode节点的启动方法" class="headerlink" title="4.2 让namenode节点兼用datanode节点的启动方法"></a>4.2 让namenode节点兼用datanode节点的启动方法</h3><h4 id="4-2-1-手动启动"><a href="#4-2-1-手动启动" class="headerlink" title="4.2.1 手动启动"></a>4.2.1 手动启动</h4><p>在namenode节点上启动datanode和nodemanager，命令分别是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hdfs --daemon start datanode</span><br><span class="line">yarn --daemon start nodemanager</span><br></pre></td></tr></table></figure>
+<p>启动后，jps情况：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/5db0e748847960d095010f79dfe902b93441d2c49dfa8d784f579bc359bd9108.png" alt="图 6">  </p>
+<h4 id="4-2-2-自动启动"><a href="#4-2-2-自动启动" class="headerlink" title="4.2.2  自动启动"></a>4.2.2  自动启动</h4><p>将namenode的域名写入workers文件，配置分发后，关闭集群，再启动集群。</p>
+<h3 id="4-3-运行mapreduce例程"><a href="#4-3-运行mapreduce例程" class="headerlink" title="4.3 运行mapreduce例程"></a>4.3 运行mapreduce例程</h3><p>运行grep，需要输入文件目录，在集群模式运算，无法使用本地文件系统，必须是hdfs，所以输入文件要保存到hdfs。<br>本地模式运行过程：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/f7277c944c73edfa5d48c6d7b0c7b5c5db65d0dfa55a8c74eab915c4b910f639.png" alt="图 9">  </p>
+<h4 id="4-3-1-准备输入文件"><a href="#4-3-1-准备输入文件" class="headerlink" title="4.3.1 准备输入文件"></a>4.3.1 准备输入文件</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">本地模式：cp $HADOOP_HOME/etc/hadoop/*.xml input </span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">集群模式：hadoop fs -put $HADOOP_HOME/etc/hadoop/*.xml /input</span><br></pre></td></tr></table></figure>
+<h4 id="4-3-2-运行"><a href="#4-3-2-运行" class="headerlink" title="4.3.2 运行"></a>4.3.2 运行</h4><p>hadoop jar $HADOOP_HOME&#x2F;share&#x2F;hadoop&#x2F;mapreduce&#x2F;hadoop-mapreduce-examples-3.3.6.jar grep &#x2F;input &#x2F;output ‘dfs[a-z.]+’</p>
+<h4 id="4-3-3-查看运行结果"><a href="#4-3-3-查看运行结果" class="headerlink" title="4.3.3 查看运行结果"></a>4.3.3 查看运行结果</h4><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hadoop fs -cat /output/*</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/273c21985669284d6b1a72e1399b5bc878c110dfbc0b87199205c0bdd8f80672.png" alt="图 10">  </p>
+<h2 id="5-hdfs存储原理"><a href="#5-hdfs存储原理" class="headerlink" title="5 hdfs存储原理"></a>5 hdfs存储原理</h2><h3 id="5-1-初始情况"><a href="#5-1-初始情况" class="headerlink" title="5.1 初始情况"></a>5.1 初始情况</h3><h4 id="5-1-1-namenode的存储结构"><a href="#5-1-1-namenode的存储结构" class="headerlink" title="5.1.1 namenode的存储结构"></a>5.1.1 namenode的存储结构</h4><p>具体文件路径：&#x2F;home&#x2F;jj&#x2F;hadoopdata&#x2F;dfs&#x2F;name&#x2F;current<br>当前文件情况：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/6fb8ae49407b0674c8c27dbe6b3369a24e488eef1502502d0141ba1d727b4a1d.png" alt="图 11"><br>删除数据文件，重新namenode格式化，没有启动集群，查看namenode文件系统：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/2e46f0ba7ac80449a957dee5a75c2b6b1650b052111744dc9d7bc8fede7da93a.png" alt="图 12"><br>其他节点没有文件目录。<br>启动集群：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/781c53a38df5c18b83e81e8c5402e938b540759a68f121000d65af62cd463cc0.png" alt="图 13"></p>
+<p>datanode节点的数据目录自动建立，结构是：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/9f0bcee9acdf8c83929e7d01971fc78bf2b152c6291e00507ecbdcae7ed49248.png" alt="图 14">  </p>
+<h4 id="5-1-2-datanode的存储结构"><a href="#5-1-2-datanode的存储结构" class="headerlink" title="5.1.2 datanode的存储结构"></a>5.1.2 datanode的存储结构</h4><p>集群启动后，datanode节点的数据目录自动建立，结构是：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/9f0bcee9acdf8c83929e7d01971fc78bf2b152c6291e00507ecbdcae7ed49248.png" alt="图 14"><br>查看数据目录结构：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/e2269001a91557bfbed5319664e7ef399c97f1a9d6b1610b4741352e6305032c.png" alt="图 15">  </p>
+<h3 id="5-2-存储文件"><a href="#5-2-存储文件" class="headerlink" title="5.2 存储文件"></a>5.2 存储文件</h3><p>为了验证，存储大于一个block（当前配置block是128M）的文件：<br>hadoop fs -put jdk-8u351-linux-x64.tar.gz  &#x2F;<br>web页面查看：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/cb8128a36ea29ca81c0c9aef9063557b32016e81bc3488c5ca4e2ccdb77eb91f.png" alt="图 16"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/5d670583fc186d41f10f583df1c9036a46dbc7f2d4706c9257a4f058d9656b3b.png" alt="图 17"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/4a93d33e339c270ce2c77660b72ae901ea055a5ee77c7d33547f5a267e10212d.png" alt="图 18"><br>通过Block ID查找文件：<br>在namenode上：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/95bb39ba38a8832a1a8a594351deb19aed12fc1be9f907af0dc51fd80d3c131f.png" alt="图 22"><br>在datanode上：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/d24be7da286abb499157cc50040314f9d6f12c1ca1af6fb13adb89d98c5b4de5.png" alt="图 23"><br>可以看到webUI上显示的block，验证这些block是否是我们上传的文件：<br>验证方法：</p>
+<ul>
+<li><p>将block拷贝出来</p>
+</li>
+<li><p>然后进行组合<br>用追加命令：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/f761b32c2e0a3154d6a91ffe3438bc1a09e1a4804b1b45086371bce7b1d92c30.png" alt="图 19">  </p>
+</li>
+<li><p>再查看文件内容<br>因为当前文件是java压缩包，可以通过解压缩方式然后查看：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/e277f7b5e5f24a8e0179d9c517d0a22d18630d3959ab1cbf0de9da67c71926a0.png" alt="图 20"><br>解压缩没有出错，查看解压缩结果：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/0775d37cafb7926b932a013720f6100c3946dd3bb0ad8da86e904011f0af79a4.png" alt="图 21"></p>
+</li>
+</ul>
+<h2 id="6-hadoop-fs-命令"><a href="#6-hadoop-fs-命令" class="headerlink" title="6 hadoop fs 命令"></a>6 hadoop fs 命令</h2><p>hdfs所有操作一概要求使用绝对路径，就是从&#x2F;开始。</p>
+<h3 id="6-1-远程集群的使用"><a href="#6-1-远程集群的使用" class="headerlink" title="6.1 远程集群的使用"></a>6.1 远程集群的使用</h3><p>可以定义fs.defaultFS来使用，定义方式有两种：（1）修改core-site.xml文件。（2）在fs命令中明确指明文件系统：hadoop -fs <a href="file:///|hdfs://namenode:port">file:///|hdfs://namenode:port</a>。</p>
+<h3 id="6-2-ls"><a href="#6-2-ls" class="headerlink" title="6.2 -ls"></a>6.2 -ls</h3><p>hdfs文件列表。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/30c5733596cf0fe5fc56d8eb9649198bdfbee19514c248eae3e888067ad55cbb.png" alt="图 24">  </p>
+<h3 id="6-3-put，-copyFromLocal"><a href="#6-3-put，-copyFromLocal" class="headerlink" title="6.3 -put， -copyFromLocal"></a>6.3 -put， -copyFromLocal</h3><p>从本地文件系统拷贝到hdfs。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/3556be2263349b081ce7c9cc32486fc53932966ca0b17fa5b2e2623c04c8e48a.png" alt="图 26"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/96f57f6c92c99a33d371ce4f5dc48703bac78a452c178e882aa7cfb5b4e0f923.png" alt="图 27">  </p>
+<h3 id="6-4-get，-copyToLocal"><a href="#6-4-get，-copyToLocal" class="headerlink" title="6.4 -get， -copyToLocal"></a>6.4 -get， -copyToLocal</h3><p>从hdfs系统拷贝到本地。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/ac1ba57f0f346592b202efc2d0f6e4f7d6b0af68b91badfcebe0aad9f6bc33f3.png" alt="图 28">  </p>
+<h3 id="6-5-mkdir"><a href="#6-5-mkdir" class="headerlink" title="6.5 -mkdir"></a>6.5 -mkdir</h3><p>在hdfs上创建目录。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/e6c798129ba91d559f2c8891003a0099ff9dae29f4aba93dcc4837bd6836f1a5.png" alt="图 29">  </p>
+<h3 id="6-6-appendToFile"><a href="#6-6-appendToFile" class="headerlink" title="6.6 -appendToFile"></a>6.6 -appendToFile</h3><p>将本地文件的内容添加到hdfs文件中去。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/272894e719fad83f43a01751c1caa81935ee0762ef86750f6ec40f990924b17f.png" alt="图 30">  </p>
+<h3 id="6-7-cat"><a href="#6-7-cat" class="headerlink" title="6.7 -cat"></a>6.7 -cat</h3><p>显示hdfs文件内容<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/ab393f887722dc95dbddec71928569bd03b3dc8aee3da7c227a04a7abbf673b8.png" alt="图 31">  </p>
+<h3 id="6-8-其他"><a href="#6-8-其他" class="headerlink" title="6.8 其他"></a>6.8 其他</h3><p>-rm：删除文件或目录。<br>-rmdir：删除空目录。<br>-moveFromLocal：移动本地文件或目录到hdfs。<br>-moveToLocal：移动hdfs文件或目录到本地。<br>-touch：在hdfs上创建一个文件。<br>-cp：hdfs中的拷贝。<br>-mv：hdfs中文件或目录的移动或改名。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">你猜我是谁</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/">http://example.com/2024/11/06/大数据-4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">jjHome</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/" title="大数据-3"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">大数据-3</div></div><div class="info-2"><div class="info-item-1">大数据-3hadoop集群部署1 基本概念1.1 namenode，datanode是HDFS（分布式文件系统）中的概念。  namenode：名字节点，保存的是文件系统树形结构和文件内容存储位置、校验码等相关信息，不保存文件的具体内容。namenode在标准模式下只有一个，存在单点故障问题，如果此节点崩溃了，整个HDFS系统文件都很难找回；为了避免这种情况，可以配置高可用集群（HA）。 datanode：按照namenode的指定，保存文件的具体内容的一部分。默认每一个文件数据块是保存三个副本，在三个不同的datanode节点上。 SecondaryNameNode：第二个名字节点，但不是namenode的同步备份，是namenode的延时备份，延时时间与系统设置和系统负载有关。  1.2...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/04/%E5%A4%A7%E6%95%B0%E6%8D%AE-1/" title="大数据-1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-04</div><div class="info-item-2">大数据-1</div></div><div class="info-2"><div class="info-item-1">大数据-11.安装必要的软件 选择软件源点击左下角软件，选择Softeare &amp; Updates图标      设置root密码 1sudo passwd root     安装编辑器vim开启一个终端窗口：桌面空白处右键选择打开一个终端，或者快捷键：Ctrl+Alt+t然后在窗口中执行 12sudo apt updatesudo apt install vim     安装openssh-serverssh是一种远程登陆的方式（协议）,使用非对称密钥。ubuntu desktop默认安装了openssh-client,没有安装openssh-server. 1sudo apt install openssh-server     设置网络分两种情况：    每台host运行一台ubuntu，由多台host运行的虚拟机组成集群。 一台host运行多个虚拟机。本次采用第二种情况。（1）网络只能使用桥接模式（第二层网络）。设置IP地址：  （2）建议网络使用NAT模式（第三层网络）。打开三个虚拟机，网络都设置为NAT模式：查看每个虚拟机的IP地址：    ...</div></div></div></a><a class="pagination-related" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-2/" title="大数据-2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-06</div><div class="info-item-2">大数据-2</div></div><div class="info-2"><div class="info-item-1">大数据-21.安装Java8Linux下软件安装方法：  （1）通过apt库安装：安装命令：sudo apt install 软件名；优点：方便；缺点：很有可能是简化版的。  （2）通过安装脚本安装：先下载安装脚本，然后安装；优点：比较方便；缺点：安装脚本找不到，软件安装内容也有可能不全。 （3）手动安装：下载二进制软件包，配置。优点：所有功能都可以自己把握；缺点：非常麻烦。 （4）源码安装：下载源代码和相关依赖。编译、安装。  1.2 下载下载Java8全功能二进制软件包：jdk-8u351-linux-x64.tar.gz。(.tar表示打包过，.gz表示压缩过)解压缩：z是压缩格式，x指解压.tar，vf是把解压缩的过程显示出来 1tar -zxvf 包名 测试：进入软件入口执行文件所在路径，全路径执行入口可执行文件：   1.3 配置环境配置环境变量：JAVA_HOME；将Java可执行文件路径配置到环境变量PATH。为了减少对系统的影响，配置到本用户下，就是只对本用户生效。配置到本用户的.bashrc中。先备份一个，然后编辑： 1cp .bashrc...</div></div></div></a><a class="pagination-related" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/" title="大数据-3"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-06</div><div class="info-item-2">大数据-3</div></div><div class="info-2"><div class="info-item-1">大数据-3hadoop集群部署1 基本概念1.1 namenode，datanode是HDFS（分布式文件系统）中的概念。  namenode：名字节点，保存的是文件系统树形结构和文件内容存储位置、校验码等相关信息，不保存文件的具体内容。namenode在标准模式下只有一个，存在单点故障问题，如果此节点崩溃了，整个HDFS系统文件都很难找回；为了避免这种情况，可以配置高可用集群（HA）。 datanode：按照namenode的指定，保存文件的具体内容的一部分。默认每一个文件数据块是保存三个副本，在三个不同的datanode节点上。 SecondaryNameNode：第二个名字节点，但不是namenode的同步备份，是namenode的延时备份，延时时间与系统设置和系统负载有关。  1.2...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">你猜我是谁</div><div class="author-info-description">嘿嘿嘿</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ncwssa"><i class="fab fa-github"></i><span>关注我</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这是我的博客</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE-4"><span class="toc-number">1.</span> <span class="toc-text">大数据-4</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-HDFS%E6%A0%BC%E5%BC%8F%E5%8C%96%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="toc-number">1.1.</span> <span class="toc-text">1 HDFS格式化相关问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-web%E6%9F%A5%E7%9C%8B%E9%A1%B5%E9%9D%A2"><span class="toc-number">1.2.</span> <span class="toc-text">2 web查看页面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-HDFS%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.</span> <span class="toc-text">3 HDFS文件上传测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%AE%A1%E7%AE%97%E8%B5%84%E6%BA%90%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.</span> <span class="toc-text">4 计算资源测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E8%A7%A3%E5%86%B3HDFS%E7%9A%84%E6%89%80%E6%9C%89%E9%97%AE%E9%A2%98"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 解决HDFS的所有问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E8%AE%A9namenode%E8%8A%82%E7%82%B9%E5%85%BC%E7%94%A8datanode%E8%8A%82%E7%82%B9%E7%9A%84%E5%90%AF%E5%8A%A8%E6%96%B9%E6%B3%95"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 让namenode节点兼用datanode节点的启动方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-%E6%89%8B%E5%8A%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">4.2.1 手动启动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-%E8%87%AA%E5%8A%A8%E5%90%AF%E5%8A%A8"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">4.2.2  自动启动</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E8%BF%90%E8%A1%8Cmapreduce%E4%BE%8B%E7%A8%8B"><span class="toc-number">1.4.3.</span> <span class="toc-text">4.3 运行mapreduce例程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-%E5%87%86%E5%A4%87%E8%BE%93%E5%85%A5%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">4.3.1 准备输入文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-%E8%BF%90%E8%A1%8C"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">4.3.2 运行</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-3-%E6%9F%A5%E7%9C%8B%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C"><span class="toc-number">1.4.3.3.</span> <span class="toc-text">4.3.3 查看运行结果</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-hdfs%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86"><span class="toc-number">1.5.</span> <span class="toc-text">5 hdfs存储原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%88%9D%E5%A7%8B%E6%83%85%E5%86%B5"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1 初始情况</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-1-namenode%E7%9A%84%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">5.1.1 namenode的存储结构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-2-datanode%E7%9A%84%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">1.5.1.2.</span> <span class="toc-text">5.1.2 datanode的存储结构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%AD%98%E5%82%A8%E6%96%87%E4%BB%B6"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 存储文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-hadoop-fs-%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.</span> <span class="toc-text">6 hadoop fs 命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E8%BF%9C%E7%A8%8B%E9%9B%86%E7%BE%A4%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-number">1.6.1.</span> <span class="toc-text">6.1 远程集群的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-ls"><span class="toc-number">1.6.2.</span> <span class="toc-text">6.2 -ls</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-put%EF%BC%8C-copyFromLocal"><span class="toc-number">1.6.3.</span> <span class="toc-text">6.3 -put， -copyFromLocal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-get%EF%BC%8C-copyToLocal"><span class="toc-number">1.6.4.</span> <span class="toc-text">6.4 -get， -copyToLocal</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5-mkdir"><span class="toc-number">1.6.5.</span> <span class="toc-text">6.5 -mkdir</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-appendToFile"><span class="toc-number">1.6.6.</span> <span class="toc-text">6.6 -appendToFile</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-7-cat"><span class="toc-number">1.6.7.</span> <span class="toc-text">6.7 -cat</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-8-%E5%85%B6%E4%BB%96"><span class="toc-number">1.6.8.</span> <span class="toc-text">6.8 其他</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/" title="大数据-4">大数据-4</a><time datetime="2024-11-06T00:49:55.000Z" title="发表于 2024-11-06 08:49:55">2024-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/" title="大数据-3">大数据-3</a><time datetime="2024-11-06T00:49:51.000Z" title="发表于 2024-11-06 08:49:51">2024-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-2/" title="大数据-2">大数据-2</a><time datetime="2024-11-06T00:39:25.000Z" title="发表于 2024-11-06 08:39:25">2024-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/04/%E5%A4%A7%E6%95%B0%E6%8D%AE-1/" title="大数据-1">大数据-1</a><time datetime="2024-11-04T14:17:52.000Z" title="发表于 2024-11-04 22:17:52">2024-11-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/28/Markdown/" title="Markdown">Markdown</a><time datetime="2024-10-28T02:23:55.000Z" title="发表于 2024-10-28 10:23:55">2024-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 你猜我是谁</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.1.0"></script><script src="/js/main.js?v=5.1.0"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.3.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'CDyGu57iPsZ5vXvs11f2jp7A-gzGzoHsz',
+      appKey: '6QkFyfGp9o4lfcvQDVgjO0V1',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.2/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>大数据-3 | jjHome</title><meta name="author" content="你猜我是谁"><meta name="copyright" content="你猜我是谁"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="大数据-3hadoop集群部署1 基本概念1.1 namenode，datanode是HDFS（分布式文件系统）中的概念。  namenode：名字节点，保存的是文件系统树形结构和文件内容存储位置、校验码等相关信息，不保存文件的具体内容。namenode在标准模式下只有一个，存在单点故障问题，如果此节点崩溃了，整个HDFS系统文件都很难找回；为了避免这种情况，可以配置高可用集群（HA）。 data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大数据-3">
+<meta property="og:url" content="http://example.com/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/index.html">
+<meta property="og:site_name" content="jjHome">
+<meta property="og:description" content="大数据-3hadoop集群部署1 基本概念1.1 namenode，datanode是HDFS（分布式文件系统）中的概念。  namenode：名字节点，保存的是文件系统树形结构和文件内容存储位置、校验码等相关信息，不保存文件的具体内容。namenode在标准模式下只有一个，存在单点故障问题，如果此节点崩溃了，整个HDFS系统文件都很难找回；为了避免这种情况，可以配置高可用集群（HA）。 data">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/avatar.png">
+<meta property="article:published_time" content="2024-11-06T00:49:51.000Z">
+<meta property="article:modified_time" content="2024-11-06T00:51:48.682Z">
+<meta property="article:author" content="你猜我是谁">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/avatar.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.1.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.6.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '大数据-3',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-06 08:51:48'
+}</script><meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/rss2.xml" title="jjHome" type="application/rss+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我们</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/avatar.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/favicon.png" alt="Logo"><span class="site-name">jjHome</span></a><a class="nav-page-title" href="/"><span class="site-name">大数据-3</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于我们</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">大数据-3</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-06T00:49:51.000Z" title="发表于 2024-11-06 08:49:51">2024-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-06T00:51:48.682Z" title="更新于 2024-11-06 08:51:48">2024-11-06</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="大数据-3"><a href="#大数据-3" class="headerlink" title="大数据-3"></a>大数据-3</h1><h2 id="hadoop集群部署"><a href="#hadoop集群部署" class="headerlink" title="hadoop集群部署"></a>hadoop集群部署</h2><h3 id="1-基本概念"><a href="#1-基本概念" class="headerlink" title="1 基本概念"></a>1 基本概念</h3><h4 id="1-1-namenode，datanode"><a href="#1-1-namenode，datanode" class="headerlink" title="1.1 namenode，datanode"></a>1.1 namenode，datanode</h4><p>是HDFS（分布式文件系统）中的概念。</p>
+<ul>
+<li>namenode：名字节点，保存的是文件系统树形结构和文件内容存储位置、校验码等相关信息，不保存文件的具体内容。namenode在标准模式下只有一个，存在单点故障问题，如果此节点崩溃了，整个HDFS系统文件都很难找回；为了避免这种情况，可以配置高可用集群（HA）。</li>
+<li>datanode：按照namenode的指定，保存文件的具体内容的一部分。默认每一个文件数据块是保存三个副本，在三个不同的datanode节点上。</li>
+<li>SecondaryNameNode：第二个名字节点，但不是namenode的同步备份，是namenode的延时备份，延时时间与系统设置和系统负载有关。</li>
+</ul>
+<h4 id="1-2-ResourceManager，NodeManager"><a href="#1-2-ResourceManager，NodeManager" class="headerlink" title="1.2 ResourceManager，NodeManager"></a>1.2 ResourceManager，NodeManager</h4><ul>
+<li>ResourceManager：资源管理器，负责整个集群的资源管理，包括存储资源和计算资源，一个集群只能有一个在运行状态。存在单点故障问题，解决办法是配置高可用集群（HA）</li>
+<li>NodeManager：节点管理，只负责本节点的资源。</li>
+<li>一般情况下，master节点部署ResourceManager，其他节点部署NodeManager，所有节点都需要有管理进程。</li>
+</ul>
+<h3 id="2-配置文件目录管理和编辑工具安装"><a href="#2-配置文件目录管理和编辑工具安装" class="headerlink" title="2 配置文件目录管理和编辑工具安装"></a>2 配置文件目录管理和编辑工具安装</h3><h4 id="2-1-选择vscode-下载-安装"><a href="#2-1-选择vscode-下载-安装" class="headerlink" title="2.1 选择vscode,下载,安装"></a>2.1 选择vscode,下载,安装</h4><p>安装：sudo apt install .&#x2F;code_1.94.2-1728494015_amd64.deb<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/3e6090986569474aa0a08870d31ce0413eca713eaad684f7f6120176a60423ed.png" alt="图 1">  </p>
+<h3 id="2-2-配置文件目录"><a href="#2-2-配置文件目录" class="headerlink" title="2.2 配置文件目录"></a>2.2 配置文件目录</h3><p>根目录：两个子目录：readOnly，specific，然后拷贝文件到目录中。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/7862ccf5f7af6c0e02292ac9cbbfa93ac775b1287424ef0eb52048baeb9613b0.png" alt="图 2">  </p>
+<h3 id="3-hadoop集群配置"><a href="#3-hadoop集群配置" class="headerlink" title="3 hadoop集群配置"></a>3 hadoop集群配置</h3><h4 id="3-1-hadoop-env-sh"><a href="#3-1-hadoop-env-sh" class="headerlink" title="3.1 hadoop-env.sh"></a>3.1 hadoop-env.sh</h4><p>配置相关目录，目的是解决读写选项权限问题。<br>目前增加的配置内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export HADOOP_PID_DIR=/home/jj/hadoopdata/HADOOP_PID_DIR</span><br><span class="line">export HADOOP_LOG_DIR=/home/jj/hadoopdata/HADOOP_LOG_DIR</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/cc5f15acc609948fdf97dc9a0dcc2bb6c53c99f1421c852c0c990c77d7711879.png" alt="图 4">  </p>
+<h4 id="3-2-core-site-xml"><a href="#3-2-core-site-xml" class="headerlink" title="3.2 core-site.xml"></a>3.2 core-site.xml</h4><p>官方手册要求配置：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/80c455931970c78c6c8022cbd7edf6758ce9c05e853bda5c9a28ef8265a9223a.png" alt="图 5"><br>配置内容：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;hdfs://master:9000&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line"></span><br><span class="line">&lt;property&gt;</span><br><span class="line">  &lt;name&gt;io.file.buffer.size&lt;/name&gt;</span><br><span class="line">  &lt;value&gt;131072&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/90ff112cde7775df545cbec1151393484268f34a49e1d91be895478d0abd41ea.png" alt="图 6">  </p>
+<h4 id="3-3"><a href="#3-3" class="headerlink" title="3.3"></a>3.3</h4><h5 id="3-3-1-namenode配置"><a href="#3-3-1-namenode配置" class="headerlink" title="3.3.1 namenode配置"></a>3.3.1 namenode配置</h5><p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/8cdaacf7e6bb849a207344ca665a2e5499d2d256e3869f57f746af0568ed9aad.png" alt="图 7">  </p>
+<ul>
+<li>dfs.namenode.name.dir：持久化名字空间和传送日志。可以用以逗号分隔的路径，这样每个路径都保存一个副本，作为冗余。<br>readOnly文件配置内容：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/fde20796374b636bae8e5732eead06facbfcad6fc8cea7ad2e9359513e6a6c61.png" alt="图 11"><br>指向了一个变量file:&#x2F;&#x2F;${hadoop.tmp.dir}&#x2F;dfs&#x2F;name构成的路径，查看变量和引用：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/875f81a62461f6ecef9e08c30151ea6ebbc8040a85cc5881401d56b9f82dc52e.png" alt="图 12"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/028919d4f00bc7f8ca69faf72d06f0197b6f1e94066afd5fdfe4df5f6afa5878.png" alt="图 13"><br>本变量被很多配置文件引用，所以修改本变量内容是比较合理且简单的办法：<br>本变量的定义位置在core-default.xml，所以我们将变量定义到core-site.xml：<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>hadoop.tmp.dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/home/jj/hadoopdata<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>A base for other temporary directories.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+当前core-site.xml内容：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/5c001b8c279d5c831a07d05ee00825dc20d8d0c08d116806a7d51cd1f9f54971.png" alt="图 14"><br>系统允许时，本配置形成的路径是：file:&#x2F;&#x2F;&#x2F;home&#x2F;jj&#x2F;hadoopdata&#x2F;dfs&#x2F;name，在namanode节点上。</li>
+<li>dfs.hosts &#x2F; dfs.hosts.exclude：设置允许的&#x2F;不允许的datanode，根据需要设置，我们不设置了。</li>
+<li>dfs.blocksize：文件存储时块大小。系统建议使用256M。readonly文件的配置是128M，我们实验时，数据文件一般不大，所以没有必要设置大的blocksize，相反，为了减少磁盘无效占用，可以适当减小blocksize。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/c8191653fedcc41c9fa0e14277b2a64f866db9eaefff33c342d86fb8205fffa0.png" alt="图 8">  </li>
+<li>dfs.namenode.handler.count：readonly文件的配置是10，维持不变，本文件不配置此项。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/2a7c39dad35b553851d1f7219dfa732d7819cdcd59f00dff66fea6f6111c8d98.png" alt="图 9"></li>
+</ul>
+<h5 id="3-3-2-datanode配置"><a href="#3-3-2-datanode配置" class="headerlink" title="3.3.2 datanode配置"></a>3.3.2 datanode配置</h5><p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/de4a6c828a8ce0cddbe56824053b23f5eb3628816ada49f93402568570bc1de0.png" alt="图 15"><br>readOnly文件中的默认配置是：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/0d8ae54a40e1c09e8b85936109cde8cf188aaf5b56bd67007c742dbc02fcce51.png" alt="图 16"><br>因为我们已经在core-site.xml中重新定义了变量hadoop.tmp.dir，所以本项不同配置了。<br>系统允许时，本配置形成的路径是：file:&#x2F;&#x2F;&#x2F;home&#x2F;jj&#x2F;hadoopdata&#x2F;dfs&#x2F;data，在datanode节点上。<br>综上：本文件当前没有配置内容。</p>
+<h4 id="3-4-yarn-site-xml"><a href="#3-4-yarn-site-xml" class="headerlink" title="3.4 yarn-site.xml"></a>3.4 yarn-site.xml</h4><p>yarn作hadoop集群的资源管理。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/7c4cb8e02c251f3a94e06036094d69edbff6dfbde1ed35bf346f0bfcaa2a07cb.png" alt="图 17"><br>以上保持默认。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/a66e6ff6531b87bbd623a8517bac453be18e0164e0da6fd9893bba0143494fd1.png" alt="图 18"><br>通过分析，需要配置yarn.resourcemanager.hostname，需要核实配置yarn.resourcemanager.scheduler.class。<br>检查yarn.resourcemanager.hostname的默认配置在yarn-default.xml：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/5667015158bb26d28ab3e7a46bee5687c5410a445c37921fddb17693a9eaf3d0.png" alt="图 19"><br>默认指向0.0.0.0，即在每个节点上都启动resourcemanager，单一个集群只能有一个resourcemanager，所以必须设置，可以任选一个节点，例如master。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">description</span>&gt;</span>The hostname of the RM.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.resourcemanager.hostname<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>master<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+<p>yarn.resourcemanager.scheduler.class的默认配置：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/e567d3622dbfa19e4fced793fdd3ee67b83139a57bcc3d4c9ce6cc7a698197e7.png" alt="图 20"><br>已经按照推荐配置了。<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/550643974ecd724ce6e381be208454b5fdd782c550af82ba395d4715d814aad7.png" alt="图 22"><br>通过分析，需要配置yarn.nodemanager.local-dirs、yarn.nodemanager.log-dirs和yarn.nodemanager.remote-app-log-dir，核实配置yarn.nodemanager.aux-services。<br>查看默认配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>List of directories to store localized files in. An </span><br><span class="line">    application&#x27;s localized file directory will be found in:</span><br><span class="line">    $&#123;yarn.nodemanager.local-dirs&#125;/usercache/$&#123;user&#125;/appcache/application_$&#123;appid&#125;.</span><br><span class="line">    Individual containers&#x27; work directories, called container_$&#123;contid&#125;, will</span><br><span class="line">    be subdirectories of this.</span><br><span class="line"> <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.local-dirs<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;hadoop.tmp.dir&#125;/nm-local-dir<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>指向的变量我们已经在core-site.xml中定义了，所以本项不用配置了。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span></span><br><span class="line">    Where to store container logs. An application&#x27;s localized log directory</span><br><span class="line">    will be found in $&#123;yarn.nodemanager.log-dirs&#125;/application_$&#123;appid&#125;.</span><br><span class="line">    Individual containers&#x27; log directories will be below this, in directories </span><br><span class="line">    named container_&#123;$contid&#125;. Each container directory will contain the files</span><br><span class="line">    stderr, stdin, and syslog generated by that container.</span><br><span class="line">  <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.log-dirs<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;yarn.log.dir&#125;/userlogs<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>yarn.nodemanager.log-dirs用到了${yarn.log.dir}，此变量没有定义，本项需要配置。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>Where to aggregate logs to.<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.remote-app-log-dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/tmp/logs<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>yarn.nodemanager.remote-app-log-dir指向&#x2F;tmp&#x2F;logs，因为写权限问题，需要重新定义。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>A comma separated list of services where service name should only</span><br><span class="line">    contain a-zA-Z0-9_ and can not start with numbers<span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.nodemanager.aux-services<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span><span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--&lt;value&gt;mapreduce_shuffle&lt;/value&gt;--&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>yarn.nodemanager.aux-services没有定义，所以需要设置，将注释取消。</p>
+<p>本部分的配置：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/74f8cacb50d66ff3f5c24669ec913a7ea703bba57c453612fd910205cb1fb591.png" alt="图 23">  </p>
+<h4 id="3-5-mapred-site-xml"><a href="#3-5-mapred-site-xml" class="headerlink" title="3.5 mapred-site.xml"></a>3.5 mapred-site.xml</h4><p>要求配置内容：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/0ed9ab8f3365a744ce73bfeaaf0b8422770936317451be7ef2b12c748e27697f.png" alt="图 24">  </p>
+<p>需要配置三项：<br>mapreduce.framework.name，mapreduce.jobhistory.intermediate-done-dir，mapreduce.jobhistory.done-dir。</p>
+<p>（1）mapreduce.framework.name的默认配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>local<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>The runtime framework for executing MapReduce jobs.</span><br><span class="line">  Can be one of local, classic or yarn.</span><br><span class="line">  <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>需要将配置修改为yarn。</p>
+<p>（2）mapreduce.jobhistory.intermediate-done-dir的默认配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.jobhistory.intermediate-done-dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;yarn.app.mapreduce.am.staging-dir&#125;/history/done_intermediate<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span><span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>指向了变量${yarn.app.mapreduce.am.staging-dir}，查看此变量设置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.app.mapreduce.am.staging-dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>/tmp/hadoop-yarn/staging<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>The staging dir used while submitting jobs.</span><br><span class="line">  <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>指向了&#x2F;tmp&#x2F;hadoop-yarn&#x2F;staging，会有写权限问题，需要设置。</p>
+<p>（3）mapreduce.jobhistory.done-dir的默认配置：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.jobhistory.done-dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;yarn.app.mapreduce.am.staging-dir&#125;/history/done<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span><span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>通过变量${yarn.app.mapreduce.am.staging-dir}进行设置，因为上一步已经设置了此变量，所以可以不用设置了。<br>总结：需要设置两项，如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>mapreduce.framework.name<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>yarn<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>The runtime framework for executing MapReduce jobs.</span><br><span class="line">  Can be one of local, classic or yarn.</span><br><span class="line">  <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>yarn.app.mapreduce.am.staging-dir<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">value</span>&gt;</span>$&#123;hadoop.tmp.dir&#125;/hadoop-yarn/staging<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">description</span>&gt;</span>The staging dir used while submitting jobs.</span><br><span class="line">  <span class="tag">&lt;/<span class="name">description</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/b9905c4b23f2d6db36ef5a1b64ac886d89125902d08df35d375400bd65d155eb.png" alt="图 25">  </p>
+<h4 id="3-6-workers"><a href="#3-6-workers" class="headerlink" title="3.6 workers"></a>3.6 workers</h4><p>在此文件中写入datanode的域名（注意：必须是域名），每行一个，在用脚本启动时，会读取此文件，进行批量启动。<br>先写两个到workers：<br>slave0<br>slave1</p>
+<h4 id="3-7-分发"><a href="#3-7-分发" class="headerlink" title="3.7 分发"></a>3.7 分发</h4><p>编写分发脚本。<br>所有节点的hadoop相关文件路径都要相同。<br>分发脚本分为软件分发和配置分发。</p>
+<ul>
+<li>软件分发：将主节点的软件分发到其他所有节点，分发脚本的主要命令是scp，分发脚本内容：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;distribute begin&quot;</span><br><span class="line">echo &quot;distribute software to slave0&quot;</span><br><span class="line">scp -r ~/software slave0:~</span><br><span class="line">echo &quot;distribute software to slave1&quot;</span><br><span class="line">scp -r ~/software slave1:~</span><br><span class="line">echo &quot;distribute end&quot;</span><br></pre></td></tr></table></figure>
+<img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/dfd0b426fccb2289145931473f8d84940c184467009c4ebb99e34a82f4e7c530.png" alt="图 26"><br>注意事项：观察分发过程，解压缩后的文件在scp过程中可能会有问题，如果有问题，scp压缩包，在节点上解压。</li>
+<li>配置分发：包括系统环境配置（.bashrc）和hadoop配置</li>
+<li><ul>
+<li>系统环境配置（.bashrc）：如果所有节点都是同构的（操作系统完全相同），可以直接分发.bashrc文件；如果是异构的，只能将配置内容拷贝。</li>
+</ul>
+</li>
+<li><ul>
+<li>hadoop配置：通过编写分发脚本，直接分发。<br>分发脚本文件内容：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;distribute begin&quot;</span><br><span class="line">echo &quot;distribute master&quot;</span><br><span class="line">scp specific/* master:$&#123;HADOOP_HOME&#125;/etc/hadoop</span><br><span class="line">echo &quot;distribute slave0&quot;</span><br><span class="line">scp specific/* slave0:$&#123;HADOOP_HOME&#125;/etc/hadoop</span><br><span class="line">echo &quot;distribute slave1&quot;</span><br><span class="line">scp specific/* slave1:$&#123;HADOOP_HOME&#125;/etc/hadoop</span><br><span class="line">echo &quot;distribute end&quot;</span><br></pre></td></tr></table></figure>
+<img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/5f5f627861667daa4ea2f3f518a6d2906afd204caa142b4b7bedca2a6b8f1f38.png" alt="图 27"></li>
+</ul>
+</li>
+</ul>
+<p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/4320c4688f2ef92d38f1b69a0ca17c97d50131775b4f8bb12a4771ea5d8a07e1.png" alt="图 29">  </p>
+<h3 id="4-集群启动"><a href="#4-集群启动" class="headerlink" title="4 集群启动"></a>4 集群启动</h3><p>需要启动HDFS和yarn</p>
+<h4 id="4-1-格式化"><a href="#4-1-格式化" class="headerlink" title="4.1 格式化"></a>4.1 格式化</h4><p>第一次启动HDFS之前必须进行格式化，而且只能进行一次，如果进行第二次格式化，就会因为文件系统的某些id不同，进入数据保护模式（安全模式）。在安全模式下，是不能对数据进行任何操作的。<br>启动集群之前的格式化是初始化文件系统，只是在namenode上；一旦启动集群，namenode将会把文件系统的初始化信息传递到所有节点。<br>注意：HDFS格式化只能在namenode节点上执行。<br>格式化之前家目录截图：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/763f8c61cc601314c4ef091a7cc8b558a588e9af7d7f36fe1e294b68a85166f9.png" alt="图 28"><br>格式化命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hdfs namenode -format</span><br></pre></td></tr></table></figure>
+<p>格式化成功的提示：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/10a37483bc6d02463e0015a23785fede0230f1d677c95438db3683474ef4c50a.png" alt="图 30"><br>创建了一个路径：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/c8c8cdcb6329adece694a88a0b1d14930598d595046719584bf29b2e01645619.png" alt="图 31">  </p>
+<h4 id="4-2-集群启动和关闭"><a href="#4-2-集群启动和关闭" class="headerlink" title="4.2 集群启动和关闭"></a>4.2 集群启动和关闭</h4><p>按照我们的配置，如果使用如下脚本，集群启动和关闭只能在namenode上执行。<br>在workers文件和ssh免密配置好的情况下，执行如下命令启动HDFS：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-dfs.sh</span><br></pre></td></tr></table></figure>
+<p>观察master的java进程：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/2ac2f097300a95e565831c76fd7d40331736f50aa48db13ca79df5135af38139.png" alt="图 32"><br>master上有namenode进程和scondarynamenode进程，说明namenode启动正常。<br>观察slave0的java进程：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/0c265f0e995d6b6b95ee4348ddb35bd2688325567eee59b7087390aeb701fcf0.png" alt="图 33"><br>观察slave1的java进程：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/7aa18bb16bfae20d53670f8f83e86237c86f779a31baa400aac266ad385a64fa.png" alt="图 34"><br>slave0和slave1都有datanode进程，说明启动正常。<br>启动yarn：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start-yarn.sh</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/ba871a7bcb293f7fd2df13eb347b03e083e67db5be4431af55fffa280bd1df3f.png" alt="图 35"><br>master节点上应该增加一个resourcemanager进程，datanode节点上应该增加了nodemanager进程，通过jps观察：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/54ab13ba535557b613920ec83944839b77c33c52884b97a07589ec5de3750a2a.png" alt="图 36"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/6b5821e7392f7d5fbd7512cd5db69ed21ba1d11cda9edcc06bc583244bf13921.png" alt="图 37"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/846cd5843d806a9f20f905095d8657588949fce7f144d916c1916fd62ab39c1f.png" alt="图 38">  </p>
+<p>关闭过程：stop-yarn.sh 和 stop-dfs.sh<br>stop-yarn.sh：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/241e3f0c521739635571a0ef3b13f60eb02b7ae01b2ae98ae451fd8e7d807ad1.png" alt="图 39"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/e573a83a563a5c9025010bb4ff0af8a0ed83aa8c900df4121210e4490db81bc9.png" alt="图 40"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/66693489a6c8bbc5c2d42609dff527c02e8465b24698ba4a459826389c248866.png" alt="图 41"><br>stop-dfs.sh：<br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/eeee14dbe53382a0ddb06f00ac0d036ce06cf38c89d55331589e7c797c2a2939.png" alt="图 42"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/4e3b62f43b5e37f3f4d3377cea09112138a7daef82d7182a63b892cb9d6b20d2.png" alt="图 43"><br><img src="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/31c4ba6142a6984d2087108c243fc4609df4a2f917441f2e5b52370ea6af8f9f.png" alt="图 44">  </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">你猜我是谁</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/">http://example.com/2024/11/06/大数据-3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">jjHome</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></div><div class="post-share"><div class="social-share" data-image="/img/avatar.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.4/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/" title="大数据-4"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">大数据-4</div></div><div class="info-2"><div class="info-item-1">大数据-41 HDFS格式化相关问题注意：在生产环境中，任何的文件删除几乎都是非常严重的事件。在HDFS有文件存在时是不可以格式化的，因为hdfs格式化仅仅在namenode节点，而数据在其他节点，有文件时格式化会造成namenode的相关id与datanode的不一致，从而进入数据保护模式（安全模式）。如果一定要进行格式化，需要先关闭集群，删除所有节点上的数据目录（在配置文件中指定的），然后进行namenode格式化，再启动集群。一旦提示是安全模式，任何数据操作都进行不了了，需要退出安全模式。 2 web查看页面   3 HDFS文件上传测试1hadoop fs -put 文件名 /    4 计算资源测试4.1 解决HDFS的所有问题文件副本数，默认是3，当前只有2个datanode节点，所以只能存2份，hdfs系统是有冲突的，解决办法：  把副本数改成1。 增加一个datanode节点。在实验环境下，可以让namenode节点兼用datanode节点。  4.2 让namenode节点兼用datanode节点的启动方法4.2.1...</div></div></div></a><a class="pagination-related" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-2/" title="大数据-2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">大数据-2</div></div><div class="info-2"><div class="info-item-1">大数据-21.安装Java8Linux下软件安装方法：  （1）通过apt库安装：安装命令：sudo apt install 软件名；优点：方便；缺点：很有可能是简化版的。  （2）通过安装脚本安装：先下载安装脚本，然后安装；优点：比较方便；缺点：安装脚本找不到，软件安装内容也有可能不全。 （3）手动安装：下载二进制软件包，配置。优点：所有功能都可以自己把握；缺点：非常麻烦。 （4）源码安装：下载源代码和相关依赖。编译、安装。  1.2 下载下载Java8全功能二进制软件包：jdk-8u351-linux-x64.tar.gz。(.tar表示打包过，.gz表示压缩过)解压缩：z是压缩格式，x指解压.tar，vf是把解压缩的过程显示出来 1tar -zxvf 包名 测试：进入软件入口执行文件所在路径，全路径执行入口可执行文件：   1.3 配置环境配置环境变量：JAVA_HOME；将Java可执行文件路径配置到环境变量PATH。为了减少对系统的影响，配置到本用户下，就是只对本用户生效。配置到本用户的.bashrc中。先备份一个，然后编辑： 1cp .bashrc...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/04/%E5%A4%A7%E6%95%B0%E6%8D%AE-1/" title="大数据-1"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-04</div><div class="info-item-2">大数据-1</div></div><div class="info-2"><div class="info-item-1">大数据-11.安装必要的软件 选择软件源点击左下角软件，选择Softeare &amp; Updates图标      设置root密码 1sudo passwd root     安装编辑器vim开启一个终端窗口：桌面空白处右键选择打开一个终端，或者快捷键：Ctrl+Alt+t然后在窗口中执行 12sudo apt updatesudo apt install vim     安装openssh-serverssh是一种远程登陆的方式（协议）,使用非对称密钥。ubuntu desktop默认安装了openssh-client,没有安装openssh-server. 1sudo apt install openssh-server     设置网络分两种情况：    每台host运行一台ubuntu，由多台host运行的虚拟机组成集群。 一台host运行多个虚拟机。本次采用第二种情况。（1）网络只能使用桥接模式（第二层网络）。设置IP地址：  （2）建议网络使用NAT模式（第三层网络）。打开三个虚拟机，网络都设置为NAT模式：查看每个虚拟机的IP地址：    ...</div></div></div></a><a class="pagination-related" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-2/" title="大数据-2"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-06</div><div class="info-item-2">大数据-2</div></div><div class="info-2"><div class="info-item-1">大数据-21.安装Java8Linux下软件安装方法：  （1）通过apt库安装：安装命令：sudo apt install 软件名；优点：方便；缺点：很有可能是简化版的。  （2）通过安装脚本安装：先下载安装脚本，然后安装；优点：比较方便；缺点：安装脚本找不到，软件安装内容也有可能不全。 （3）手动安装：下载二进制软件包，配置。优点：所有功能都可以自己把握；缺点：非常麻烦。 （4）源码安装：下载源代码和相关依赖。编译、安装。  1.2 下载下载Java8全功能二进制软件包：jdk-8u351-linux-x64.tar.gz。(.tar表示打包过，.gz表示压缩过)解压缩：z是压缩格式，x指解压.tar，vf是把解压缩的过程显示出来 1tar -zxvf 包名 测试：进入软件入口执行文件所在路径，全路径执行入口可执行文件：   1.3 配置环境配置环境变量：JAVA_HOME；将Java可执行文件路径配置到环境变量PATH。为了减少对系统的影响，配置到本用户下，就是只对本用户生效。配置到本用户的.bashrc中。先备份一个，然后编辑： 1cp .bashrc...</div></div></div></a><a class="pagination-related" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/" title="大数据-4"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-06</div><div class="info-item-2">大数据-4</div></div><div class="info-2"><div class="info-item-1">大数据-41 HDFS格式化相关问题注意：在生产环境中，任何的文件删除几乎都是非常严重的事件。在HDFS有文件存在时是不可以格式化的，因为hdfs格式化仅仅在namenode节点，而数据在其他节点，有文件时格式化会造成namenode的相关id与datanode的不一致，从而进入数据保护模式（安全模式）。如果一定要进行格式化，需要先关闭集群，删除所有节点上的数据目录（在配置文件中指定的），然后进行namenode格式化，再启动集群。一旦提示是安全模式，任何数据操作都进行不了了，需要退出安全模式。 2 web查看页面   3 HDFS文件上传测试1hadoop fs -put 文件名 /    4 计算资源测试4.1 解决HDFS的所有问题文件副本数，默认是3，当前只有2个datanode节点，所以只能存2份，hdfs系统是有冲突的，解决办法：  把副本数改成1。 增加一个datanode节点。在实验环境下，可以让namenode节点兼用datanode节点。  4.2 让namenode节点兼用datanode节点的启动方法4.2.1...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">你猜我是谁</div><div class="author-info-description">嘿嘿嘿</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">6</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">2</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/ncwssa"><i class="fab fa-github"></i><span>关注我</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">这是我的博客</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%A7%E6%95%B0%E6%8D%AE-3"><span class="toc-number">1.</span> <span class="toc-text">大数据-3</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#hadoop%E9%9B%86%E7%BE%A4%E9%83%A8%E7%BD%B2"><span class="toc-number">1.1.</span> <span class="toc-text">hadoop集群部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.1.1.</span> <span class="toc-text">1 基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-namenode%EF%BC%8Cdatanode"><span class="toc-number">1.1.1.1.</span> <span class="toc-text">1.1 namenode，datanode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-ResourceManager%EF%BC%8CNodeManager"><span class="toc-number">1.1.1.2.</span> <span class="toc-text">1.2 ResourceManager，NodeManager</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86%E5%92%8C%E7%BC%96%E8%BE%91%E5%B7%A5%E5%85%B7%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.2.</span> <span class="toc-text">2 配置文件目录管理和编辑工具安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-%E9%80%89%E6%8B%A9vscode-%E4%B8%8B%E8%BD%BD-%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.2.1.</span> <span class="toc-text">2.1 选择vscode,下载,安装</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.3.</span> <span class="toc-text">2.2 配置文件目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-hadoop%E9%9B%86%E7%BE%A4%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.4.</span> <span class="toc-text">3 hadoop集群配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-hadoop-env-sh"><span class="toc-number">1.1.4.1.</span> <span class="toc-text">3.1 hadoop-env.sh</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-core-site-xml"><span class="toc-number">1.1.4.2.</span> <span class="toc-text">3.2 core-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3"><span class="toc-number">1.1.4.3.</span> <span class="toc-text">3.3</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#3-3-1-namenode%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.4.3.1.</span> <span class="toc-text">3.3.1 namenode配置</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3-3-2-datanode%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.4.3.2.</span> <span class="toc-text">3.3.2 datanode配置</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-yarn-site-xml"><span class="toc-number">1.1.4.4.</span> <span class="toc-text">3.4 yarn-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-mapred-site-xml"><span class="toc-number">1.1.4.5.</span> <span class="toc-text">3.5 mapred-site.xml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-6-workers"><span class="toc-number">1.1.4.6.</span> <span class="toc-text">3.6 workers</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-7-%E5%88%86%E5%8F%91"><span class="toc-number">1.1.4.7.</span> <span class="toc-text">3.7 分发</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8"><span class="toc-number">1.1.5.</span> <span class="toc-text">4 集群启动</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-number">1.1.5.1.</span> <span class="toc-text">4.1 格式化</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-%E9%9B%86%E7%BE%A4%E5%90%AF%E5%8A%A8%E5%92%8C%E5%85%B3%E9%97%AD"><span class="toc-number">1.1.5.2.</span> <span class="toc-text">4.2 集群启动和关闭</span></a></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-4/" title="大数据-4">大数据-4</a><time datetime="2024-11-06T00:49:55.000Z" title="发表于 2024-11-06 08:49:55">2024-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-3/" title="大数据-3">大数据-3</a><time datetime="2024-11-06T00:49:51.000Z" title="发表于 2024-11-06 08:49:51">2024-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/06/%E5%A4%A7%E6%95%B0%E6%8D%AE-2/" title="大数据-2">大数据-2</a><time datetime="2024-11-06T00:39:25.000Z" title="发表于 2024-11-06 08:39:25">2024-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/11/04/%E5%A4%A7%E6%95%B0%E6%8D%AE-1/" title="大数据-1">大数据-1</a><time datetime="2024-11-04T14:17:52.000Z" title="发表于 2024-11-04 22:17:52">2024-11-04</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/10/28/Markdown/" title="Markdown">Markdown</a><time datetime="2024-10-28T02:23:55.000Z" title="发表于 2024-10-28 10:23:55">2024-10-28</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By 你猜我是谁</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.1.0"></script><script src="/js/main.js?v=5.1.0"></script><div class="js-pjax"><script>(() => {
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = `%%{init:{ 'theme':'${theme}'}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.3.0/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'CDyGu57iPsZ5vXvs11f2jp7A-gzGzoHsz',
+      appKey: '6QkFyfGp9o4lfcvQDVgjO0V1',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/valine@1.5.2/dist/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !true) {
+    if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
