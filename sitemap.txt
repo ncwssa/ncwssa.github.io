@@ -9,6 +9,6 @@ http://example.com/about/index.html
 http://example.com/tags/index.html
 http://example.com/categories/index.html
 http://example.com/
-http://example.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/
 http://example.com/tags/Markdown%E8%AF%AD%E6%B3%95/
+http://example.com/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/
 http://example.com/categories/%E5%AD%A6%E4%B9%A0/
